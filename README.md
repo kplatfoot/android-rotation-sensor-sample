@@ -7,3 +7,5 @@ It shows proper usage of the following Android features:
 - Converting the raw rotation matrix to pitch and roll, measured in degrees.
 - Adjusting the rotation values based on the device orientation (e.g. portrait vs. landscape).
 - Drawing a custom view, including using Porter-Duff transfer mode to create an anti-aliased circle cut-out.
+
+![Screenshot](screenshot.png)
