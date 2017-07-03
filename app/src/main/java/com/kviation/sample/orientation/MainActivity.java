@@ -1,36 +1,32 @@
 package com.kviation.sample.orientation;
 
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements Orientation.Listener {
+public class MainActivity extends AppCompatActivity implements LifecycleRegistryOwner {
 
-  private Orientation mOrientation;
-  private AttitudeIndicator mAttitudeIndicator;
+  private LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main);
 
-    mOrientation = new Orientation(this);
-    mAttitudeIndicator = (AttitudeIndicator) findViewById(R.id.attitude_indicator);
+    final AttitudeIndicator aiView = (AttitudeIndicator) findViewById(R.id.attitude_indicator);
+
+    Orientation orientation = new Orientation(this, new Orientation.Listener() {
+      @Override
+      public void onOrientationChanged(float pitch, float roll) {
+        aiView.setAttitude(pitch, roll);
+      }
+    });
+    getLifecycle().addObserver(orientation);
   }
 
   @Override
-  protected void onStart() {
-    super.onStart();
-    mOrientation.startListening(this);
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-    mOrientation.stopListening();
-  }
-
-  @Override
-  public void onOrientationChanged(float pitch, float roll) {
-    mAttitudeIndicator.setAttitude(pitch, roll);
+  public LifecycleRegistry getLifecycle() {
+    return mLifecycleRegistry;
   }
 }

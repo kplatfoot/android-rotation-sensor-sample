@@ -2,6 +2,9 @@
 package com.kviation.sample.orientation;
 
 import android.app.Activity;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,7 +13,7 @@ import android.support.annotation.Nullable;
 import android.view.Surface;
 import android.view.WindowManager;
 
-public class Orientation implements SensorEventListener {
+public class Orientation implements SensorEventListener, LifecycleObserver {
 
   public interface Listener {
     void onOrientationChanged(float pitch, float roll);
@@ -28,29 +31,38 @@ public class Orientation implements SensorEventListener {
   private int mLastAccuracy;
   private Listener mListener;
 
-  public Orientation(Activity activity) {
+  public Orientation(Activity activity, Listener listener) {
     mWindowManager = activity.getWindow().getWindowManager();
     mSensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
 
-    // Can be null if the sensor hardware is not available
     mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+    if (mRotationSensor == null) {
+      LogUtil.w("Rotation vector sensor not available; cannot provide orientation data.");
+    }
+
+    mListener = listener;
   }
 
-  public void startListening(Listener listener) {
-    if (mListener == listener) {
+  @OnLifecycleEvent(Lifecycle.Event.ON_START)
+  public void startListening() {
+    if (mRotationSensor == null) {
       return;
     }
-    mListener = listener;
-    if (mRotationSensor == null) {
-      LogUtil.w("Rotation vector sensor not available; will not provide orientation data.");
-      return;
+    if (LogUtil.LOGV) {
+      LogUtil.v("Registering rotation sensor listener");
     }
     mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY_MICROS);
   }
 
+  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
   public void stopListening() {
+    if (mRotationSensor == null) {
+      return;
+    }
+    if (LogUtil.LOGV) {
+      LogUtil.v("Unregistering rotation sensor listener");
+    }
     mSensorManager.unregisterListener(this);
-    mListener = null;
   }
 
   @Override
