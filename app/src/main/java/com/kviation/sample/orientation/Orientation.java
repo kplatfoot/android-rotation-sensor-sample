@@ -2,18 +2,18 @@
 package com.kviation.sample.orientation;
 
 import android.app.Activity;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.DefaultLifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.Surface;
 import android.view.WindowManager;
 
-public class Orientation implements SensorEventListener, LifecycleObserver {
+public class Orientation implements SensorEventListener, DefaultLifecycleObserver {
 
   public interface Listener {
     void onOrientationChanged(float pitch, float roll);
@@ -43,8 +43,8 @@ public class Orientation implements SensorEventListener, LifecycleObserver {
     mListener = listener;
   }
 
-  @OnLifecycleEvent(Lifecycle.Event.ON_START)
-  public void startListening() {
+  @Override
+  public void onStart(@NonNull LifecycleOwner owner) {
     if (mRotationSensor == null) {
       return;
     }
@@ -54,8 +54,8 @@ public class Orientation implements SensorEventListener, LifecycleObserver {
     mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY_MICROS);
   }
 
-  @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-  public void stopListening() {
+  @Override
+  public void onStop(@NonNull LifecycleOwner owner) {
     if (mRotationSensor == null) {
       return;
     }
