@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -189,16 +190,22 @@ public class AttitudeIndicator extends View {
     Bitmap src = getSrc();
     Bitmap dst = getDst();
 
-    int sc = canvas.saveLayer(0, 0, mWidth, mHeight, null, Canvas.MATRIX_SAVE_FLAG
-        | Canvas.CLIP_SAVE_FLAG | Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
-        | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.CLIP_TO_LAYER_SAVE_FLAG);
-
+    int sc = saveLayer(canvas);
     canvas.drawBitmap(dst, 0, 0, mBitmapPaint);
     mBitmapPaint.setXfermode(mXfermode);
     canvas.drawBitmap(src, 0, 0, mBitmapPaint);
     mBitmapPaint.setXfermode(null);
 
     canvas.restoreToCount(sc);
+  }
+
+  private int saveLayer(Canvas canvas) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      return canvas.saveLayer(0, 0, mWidth, mHeight, null);
+    } else {
+      //noinspection deprecation
+      return canvas.saveLayer(0, 0, mWidth, mHeight, null, Canvas.ALL_SAVE_FLAG);
+    }
   }
 
   private long frameCountStartedAt = 0;
