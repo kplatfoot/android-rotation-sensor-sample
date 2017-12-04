@@ -10,4 +10,6 @@ It shows proper usage of the following Android features:
 
 ![Screenshot](screenshot.png)
 
-Check out the [arch-components](https://github.com/kplatfoot/android-rotation-sensor-sample/tree/arch-components) branch to see how to use the new [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) to start/stop the sensor listener automatically at the right time in the activity lifecycle.
+The [kotlin](https://github.com/kplatfoot/android-rotation-sensor-sample/tree/kotlin) branch shows the same app written in Kotlin.
+
+The [arch-components](https://github.com/kplatfoot/android-rotation-sensor-sample/tree/arch-components) branch shows how to use the new [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html) to start/stop the sensor listener automatically at the right time in the activity lifecycle.
