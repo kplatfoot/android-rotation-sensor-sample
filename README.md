@@ -9,5 +9,3 @@ It shows proper usage of the following Android features:
 - Drawing a custom view, including using Porter-Duff transfer mode to create an anti-aliased circle cut-out.
 
 ![Screenshot](screenshot.png)
-
-Check out the _arch-components_ branch to see how to use the new Android Architecture Components (still in alpha) to start/stop the sensor listener.
