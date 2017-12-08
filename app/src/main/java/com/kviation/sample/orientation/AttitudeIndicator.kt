@@ -13,6 +13,9 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 
+private const val TAG = "AttitudeIndicator"
+private const val LOG_FPS = false
+
 class AttitudeIndicator @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val mXfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
@@ -186,10 +189,5 @@ class AttitudeIndicator @JvmOverloads constructor(context: Context, attrs: Attri
             frameCount = 0
             frameCountStartedAt = System.currentTimeMillis()
         }
-    }
-
-    companion object {
-        private val TAG = "AttitudeIndicator"
-        private val LOG_FPS = false
     }
 }

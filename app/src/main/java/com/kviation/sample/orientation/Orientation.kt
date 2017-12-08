@@ -9,6 +9,9 @@ import android.util.Log
 import android.view.Surface
 import android.view.WindowManager
 
+private const val TAG = "Orientation"
+private const val SENSOR_DELAY_MICROS = 16 * 1000 // 16ms
+
 class Orientation(activity: Activity) : SensorEventListener {
 
     interface Listener {
@@ -86,12 +89,5 @@ class Orientation(activity: Activity) : SensorEventListener {
         val roll = orientation[2] * -57
 
         mListener?.onOrientationChanged(pitch, roll)
-    }
-
-    companion object {
-
-        private val TAG = "Orientation"
-
-        private val SENSOR_DELAY_MICROS = 16 * 1000 // 16ms
     }
 }
